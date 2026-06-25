@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "FeedFlow ERP AI"
+version = "1.0.0"
+id = "artifacts/feedflow-erp"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22201
+
+[services.development]
+run = "pnpm --filter @workspace/feedflow-erp run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/feedflow-erp", "run", "build" ]
+publicDir = "artifacts/feedflow-erp/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22201"
+BASE_PATH = "/"

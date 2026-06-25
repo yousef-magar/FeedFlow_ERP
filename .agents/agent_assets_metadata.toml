@@ -1,0 +1,14 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "HrYnOw03wzsuBxgv9IvmP"
+uri = "file://artifacts/feedflow-erp/public/feedflow-erp-project.tar.gz"
+type = "unspecified"
+title = "FeedFlow ERP - ملفات المشروع كاملة (.tar.gz)"
+
+[[outputs]]
+id = "xXW8F87mBGHFb5VeB4iwu"
+uri = "file://artifacts/feedflow-erp/public/feedflow-src.tar.gz"
+type = "unspecified"
+title = "FeedFlow ERP - الكود فقط (87 KB)"

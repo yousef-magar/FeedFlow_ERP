@@ -1,0 +1,1 @@
+- [Production store architecture](production-store.md) — all production data (orders, formulas, inventory) lives in a single shared Zustand store with localStorage persistence

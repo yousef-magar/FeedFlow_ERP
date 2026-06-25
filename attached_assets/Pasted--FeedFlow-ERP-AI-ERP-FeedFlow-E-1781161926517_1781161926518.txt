@@ -1,0 +1,992 @@
+# FeedFlow ERP AI
+
+## نظام ERP ذكي متكامل لإدارة مصانع الأعلاف
+
+---
+
+# نظرة عامة
+
+FeedFlow ERP AI هو نظام ERP متكامل مصمم خصيصًا لمصانع الأعلاف، يجمع بين:
+
+* إدارة الإنتاج.
+* إدارة الخامات والأعلاف.
+* المبيعات والفواتير.
+* المخزون.
+* النقل والشحن.
+* الموارد البشرية.
+* الحسابات والمالية.
+* إدارة العملاء CRM.
+* الذكاء الاصطناعي Gemini.
+* التحليلات والتقارير المتقدمة.
+
+تم تصميم النظام ليكون:
+
+* Modern UI/UX.
+* Responsive.
+* يدعم العربية والإنجليزية.
+* قابل للتخصيص بالكامل.
+* Multi Company Ready.
+* Multi Branch Ready.
+* SaaS Ready.
+* AI Powered.
+
+---
+
+# Architecture
+
+يتكون النظام من:
+
+1. ERP Core
+2. Feed Management
+3. Production Management
+4. Inventory Management
+5. Sales & Invoicing
+6. CRM
+7. Fleet & Delivery AI
+8. HR & Payroll
+9. Marketing & Commission System
+10. Accounting & Finance
+11. Procurement Management
+12. Maintenance Management
+13. Reporting & BI
+14. AI Assistant
+15. Customer Portal
+16. Supplier Portal
+
+---
+
+# ERP Core
+
+## Company Setup
+
+عند تشغيل النظام لأول مرة:
+
+* اسم الشركة.
+* الشعار.
+* العنوان.
+* أرقام التواصل.
+* البريد الإلكتروني.
+* الموقع الإلكتروني.
+* الأختام.
+* التوقيع الرسمي.
+
+يتم استخدام هذه البيانات تلقائيًا في:
+
+* الفواتير.
+* العقود.
+* التقارير.
+* PDF.
+* الطباعة.
+* شاشة تسجيل الدخول.
+
+---
+
+## Multi Branch
+
+* فرع رئيسي.
+* عدد غير محدود من الفروع.
+* مخزون مستقل لكل فرع.
+* خزنة مستقلة لكل فرع.
+* تقارير مجمعة.
+
+---
+
+## Languages
+
+* العربية RTL.
+* الإنجليزية LTR.
+* التبديل الفوري بين اللغات.
+
+---
+
+## Themes
+
+* Light Mode.
+* Dark Mode.
+* Custom Branding.
+* Custom Colors.
+
+---
+
+# Feed Management
+
+## إدارة الأعلاف
+
+لكل منتج:
+
+* اسم المنتج.
+* الكود.
+* التصنيف.
+* نسبة البروتين.
+* وزن الشيكارة.
+* سعر الجملة.
+* سعر القطاعي.
+* سعر الموزعين.
+* الحد الأدنى للبيع.
+
+---
+
+## Formula Management
+
+إدارة تركيبات الأعلاف.
+
+مثال:
+
+علف تسمين 21%
+
+* ذرة 60%
+* صويا 25%
+* مركزات 10%
+* إضافات 5%
+
+النظام يحسب:
+
+* تكلفة الطن.
+* تكلفة الكيلو.
+* الربحية.
+* استهلاك الخامات.
+
+---
+
+## Dynamic Pricing
+
+التسعير الذكي بناءً على:
+
+* سعر الذرة.
+* أسعار الخامات.
+* تكلفة التشغيل.
+* المصروفات.
+* هامش الربح.
+
+عند تعديل سعر الذرة:
+
+* إعادة تسعير الكيلو.
+* إعادة تسعير الشيكارة.
+* إعادة تسعير الجملة.
+* إعادة تسعير القطاعي.
+
+---
+
+# Production Management
+
+## أوامر التصنيع
+
+إنشاء أوامر إنتاج.
+
+مثال:
+
+إنتاج 20 طن علف تسمين.
+
+---
+
+## حساب الخامات
+
+النظام يحسب تلقائيًا:
+
+* الذرة المطلوبة.
+* الصويا المطلوبة.
+* الإضافات المطلوبة.
+
+---
+
+## خصم الخامات
+
+خصم تلقائي من المخزون.
+
+---
+
+## تكلفة الإنتاج
+
+* تكلفة المواد الخام.
+* تكلفة العمالة.
+* تكلفة التشغيل.
+* تكلفة الكهرباء.
+
+---
+
+# Inventory Management
+
+## إدارة المخزون
+
+* بالكيلو.
+* بالطن.
+* بالشكاير.
+
+---
+
+## المخازن
+
+* مخازن متعددة.
+* تحويل بين المخازن.
+
+---
+
+## Batch Tracking
+
+* رقم التشغيلة.
+* تاريخ الإنتاج.
+* تاريخ الانتهاء.
+
+---
+
+## Inventory Alerts
+
+تنبيهات:
+
+* نفاد المخزون.
+* انخفاض المخزون.
+* انتهاء الصلاحية.
+
+---
+
+# Sales & Invoicing
+
+## إدارة العملاء
+
+* اسم العميل.
+* الهاتف.
+* العنوان.
+* المنطقة.
+* المحافظة.
+* مركز التوزيع.
+
+---
+
+## الفواتير
+
+* فاتورة نقدي.
+* فاتورة آجل.
+* فاتورة جملة.
+* فاتورة قطاعي.
+
+---
+
+## الفاتورة
+
+* العميل.
+* المنتج.
+* الكمية.
+* السعر.
+* الخصومات.
+* الضريبة.
+* الشحن.
+
+---
+
+## الفاتورة الإلكترونية
+
+* PDF.
+* Print.
+* WhatsApp.
+* Email.
+
+---
+
+## Approval Workflow
+
+إذا:
+
+* الخصم أكبر من نسبة معينة.
+* الفاتورة أكبر من قيمة معينة.
+
+يتم إرسالها للموافقة.
+
+---
+
+# CRM
+
+## ملف العميل الكامل
+
+* إجمالي المشتريات.
+* آخر عملية شراء.
+* المنتجات المفضلة.
+* متوسط الشراء الشهري.
+
+---
+
+## تنبيهات العملاء
+
+مثال:
+
+العميل لم يشتر منذ 30 يومًا.
+
+---
+
+## Customer Timeline
+
+* أول تعامل.
+* آخر فاتورة.
+* التحصيلات.
+* الشكاوى.
+* الزيارات.
+
+---
+
+## Customer Portal
+
+يمكن للعميل:
+
+* رؤية الفواتير.
+* متابعة الطلبات.
+* كشف الحساب.
+* الشحنات.
+* المدفوعات.
+
+---
+
+# Fleet & Delivery AI
+
+## إدارة السيارات
+
+* دبابه.
+* نصف نقل.
+* ربع نقل.
+* نقل ثقيل.
+
+---
+
+## إدارة السائقين
+
+* البيانات.
+* الرخص.
+* المستندات.
+
+---
+
+## AI Route Optimization
+
+Gemini يقوم بـ:
+
+* تحليل العناوين.
+* تجميع الطلبات.
+* اختيار السيارة المناسبة.
+* اختيار السائق المناسب.
+* اقتراح أفضل مسار.
+
+---
+
+## GPS Tracking
+
+* تتبع مباشر.
+* حالة الشحنة.
+
+---
+
+## Proof of Delivery
+
+* صورة.
+* توقيع.
+* إثبات استلام.
+
+---
+
+# Maintenance Management
+
+لكل سيارة:
+
+* الصيانة.
+* الزيت.
+* الكاوتش.
+* البطارية.
+* التأمين.
+
+مع تنبيهات تلقائية.
+
+---
+
+# HR Management
+
+## ملفات الموظفين
+
+* بيانات شخصية.
+* مستندات.
+* عقود.
+* رواتب.
+
+---
+
+## الحضور والانصراف
+
+* يدوي.
+* بصمة.
+* QR Code.
+
+---
+
+## الإجازات
+
+* اعتيادي.
+* مرضي.
+* بدون راتب.
+
+---
+
+## السلف
+
+* طلب سلفة.
+* اعتماد.
+* خصم تلقائي.
+
+---
+
+# Payroll System
+
+## الرواتب
+
+* أساسي.
+* بدلات.
+* إضافي.
+* خصومات.
+* سلف.
+
+---
+
+## Payroll Approval
+
+اعتماد الرواتب قبل الصرف.
+
+---
+
+## Payroll Export
+
+* PDF.
+* Excel.
+
+---
+
+# Marketing & Commission System
+
+## إدارة المسوقين
+
+ربط كل عميل بمسوق.
+
+---
+
+## العمولات
+
+### نسبة من الفاتورة
+
+مثال:
+
+2%
+
+---
+
+### مبلغ لكل طن
+
+مثال:
+
+50 جنيه لكل طن.
+
+---
+
+### نظام الشرائح
+
+0 - 100 طن = 1%
+
+100 - 300 طن = 2%
+
+300+ طن = 3%
+
+---
+
+## طرق صرف العمولات
+
+### يومي
+
+إضافة للخزنة اليومية.
+
+### أسبوعي
+
+صرف أسبوعي.
+
+### شهري
+
+إضافة للراتب.
+
+---
+
+## Approval
+
+يعتمدها HR أو الإدارة.
+
+---
+
+## KPI System
+
+* أهداف شهرية.
+* أهداف أسبوعية.
+* أهداف سنوية.
+
+---
+
+## Bonuses
+
+تحقيق الهدف = مكافأة تلقائية.
+
+---
+
+# Accounting & Finance
+
+## الخزنة
+
+* خزنة رئيسية.
+* خزائن فرعية.
+
+---
+
+## البنوك
+
+* حسابات بنكية.
+* تحويلات.
+
+---
+
+## الإيرادات
+
+تسجيل الإيرادات.
+
+---
+
+## المصروفات
+
+تسجيل المصروفات.
+
+---
+
+## اليومية
+
+* أول المدة.
+* المقبوضات.
+* المدفوعات.
+* آخر المدة.
+
+---
+
+## الجرد اليومي
+
+اعتماد يومي للخزنة.
+
+---
+
+## العهد
+
+* عهدة سائق.
+* عهدة مندوب.
+* عهدة موظف.
+
+---
+
+## العملاء الآجل
+
+* حد ائتماني.
+* فترة سماح.
+* ديون.
+
+---
+
+## التحصيلات
+
+* متابعة التحصيل.
+* تنبيهات التأخير.
+
+---
+
+## الموردين
+
+* أرصدة.
+* فواتير.
+* مدفوعات.
+
+---
+
+## مراكز التكلفة
+
+* الإنتاج.
+* النقل.
+* التسويق.
+* الإدارة.
+
+---
+
+## الأرباح والخسائر
+
+تقارير شاملة.
+
+---
+
+# Procurement Management
+
+## الموردين
+
+إدارة كاملة للموردين.
+
+---
+
+## طلبات الشراء
+
+Purchase Orders.
+
+---
+
+## موافقات الشراء
+
+Approval Workflow.
+
+---
+
+## فواتير الشراء
+
+Purchase Invoices.
+
+---
+
+# Notifications Center
+
+تنبيهات:
+
+* انخفاض المخزون.
+* ارتفاع سعر الذرة.
+* تأخر السداد.
+* اقتراب الصيانة.
+* انتهاء الترخيص.
+* تجاوز الأهداف.
+* طلب موافقة جديد.
+
+الإرسال عبر:
+
+* النظام.
+* واتساب.
+* SMS.
+* Email.
+
+---
+
+# Reports & BI
+
+## التقارير
+
+* يومية.
+* أسبوعية.
+* شهرية.
+* سنوية.
+
+---
+
+## Profit Analytics
+
+* ربح منتج.
+* ربح عميل.
+* ربح منطقة.
+* ربح مندوب.
+
+---
+
+## Driver Analytics
+
+* أداء السائقين.
+
+---
+
+## Employee Analytics
+
+* أداء الموظفين.
+
+---
+
+## Executive Dashboard
+
+لصاحب المصنع:
+
+* مبيعات اليوم.
+* أرباح اليوم.
+* الشحنات.
+* التحصيلات.
+* الديون.
+* المخزون الحرج.
+* الموظفين الغائبين.
+
+---
+
+# AI Assistant
+
+مساعد ذكي داخلي يعتمد على Gemini.
+
+يمكنه الإجابة على:
+
+* المبيعات.
+* العملاء.
+* المخزون.
+* الحسابات.
+* الرواتب.
+* الشحنات.
+* التقارير.
+
+---
+
+## AI Forecasting
+
+يتوقع:
+
+* المبيعات القادمة.
+* احتياجات الخامات.
+* المنتجات الأكثر طلبًا.
+
+---
+
+## AI Chat
+
+أسئلة مثل:
+
+كم مبيعات الشهر الحالي؟
+
+من أفضل عميل؟
+
+كم طن تم بيعهم الأسبوع الماضي؟
+
+---
+
+# Import & Export Center
+
+## الاستيراد
+
+* Excel.
+* CSV.
+* PDF.
+* OCR Documents.
+
+---
+
+## التصدير
+
+* Excel.
+* PDF.
+* CSV.
+
+---
+
+## AI Data Import
+
+رفع ملف PDF أو Excel.
+
+يقوم Gemini بتحليل الملف وإضافة البيانات تلقائيًا.
+
+---
+
+# Document Management
+
+رفع وإدارة:
+
+* العقود.
+* الرخص.
+* ملفات الموظفين.
+* مستندات العملاء.
+* مستندات الموردين.
+
+---
+
+# Security & Audit Log
+
+## Audit Log
+
+تسجيل:
+
+* تعديل الأسعار.
+* حذف الفواتير.
+* تعديل المخزون.
+* تعديل الرواتب.
+
+---
+
+## Security
+
+* Two Factor Authentication.
+* Session Management.
+* Device Tracking.
+
+---
+
+## Backup System
+
+* يومي.
+* أسبوعي.
+* شهري.
+
+مع إمكانية الاسترجاع الكامل.
+
+---
+
+# System Settings
+
+جميع الموديولات قابلة:
+
+* للتفعيل.
+* للإيقاف.
+* للإخفاء.
+* لتحديد الصلاحيات.
+
+مثال:
+
+✅ HR
+
+✅ Accounting
+
+✅ AI Assistant
+
+❌ Fleet
+
+❌ CRM
+
+بدون تعديل أي كود.
+
+---
+
+# الهدف النهائي
+
+بناء منصة ERP ذكية متخصصة لمصانع الأعلاف، قابلة للبيع كمنتج تجاري مستقل، وتدعم التوسع إلى مصانع متعددة وفروع متعددة مع اعتماد الذكاء الاصطناعي في التشغيل والتحليل واتخاذ القرار.
+
+انا عايز بس تأكد ع جزئية يجب كل حاجه يكون ليها اعدادات وقابله للتفعيل او الاغلاق بالمعناالحرفي 
+وكمان اهم حاجه البيانات القابله استردها من ملفات خارجيه pdf xlsx json csv 
+يستقبلها طبيعي ويتعرف عليها ويضفها تلقائي للسيستم 
+
+
+# Motion Design & Premium Experience Requirements
+
+Motion Design is a core product requirement and must be treated as a first-class feature, not a visual enhancement.
+
+The application must not use basic, generic, traditional, or standard ERP animations.
+
+Avoid:
+
+* Basic fade-in effects.
+* Simple slide animations.
+* Generic dashboard transitions.
+* Standard admin panel interactions.
+* Outdated enterprise UI patterns.
+
+The entire experience must feel alive, premium, fluid, and visually impressive.
+
+Every interaction should provide meaningful visual feedback and create a sense of quality, speed, and sophistication.
+
+The platform should deliver a world-class motion design experience comparable to top-tier software products while maintaining enterprise-level usability.
+
+The application must include:
+
+### Page Transitions
+
+* Seamless navigation transitions.
+* Context-aware page changes.
+* Shared element transitions.
+* Smooth route animations.
+
+### Dashboard Experience
+
+* Animated KPI counters.
+* Dynamic chart transitions.
+* Live-updating statistics.
+* Interactive widgets.
+* Data visualization animations.
+
+### Tables & Data Grids
+
+* Smooth row insertion.
+* Animated filtering.
+* Animated sorting.
+* Animated searching.
+* Expandable row transitions.
+* Bulk action visual feedback.
+
+### Forms & Workflows
+
+* Progressive form animations.
+* Smart validation feedback.
+* Animated success states.
+* Animated error states.
+* Multi-step workflow transitions.
+
+### AI Features
+
+* Premium AI thinking states.
+* Intelligent loading experiences.
+* Animated AI recommendations.
+* Dynamic route planning visualization.
+* Live shipment grouping animations.
+* AI-powered forecasting visualizations.
+
+### Fleet & Delivery
+
+* Animated map interactions.
+* Live vehicle movement visualization.
+* Dynamic route rendering.
+* Shipment allocation animations.
+* Delivery status transitions.
+
+### Inventory & Warehouses
+
+* Real-time inventory movement visualization.
+* Animated stock level indicators.
+* Warehouse activity dashboards.
+
+### HR & Payroll
+
+* Interactive employee profiles.
+* Animated attendance analytics.
+* Payroll processing visual feedback.
+
+### Reporting & Analytics
+
+* Premium chart animations.
+* Interactive drill-down reports.
+* Animated KPI comparisons.
+* Executive-level business intelligence visuals.
+
+### Empty States
+
+Every empty state must be custom-designed with meaningful illustrations and animations rather than static placeholders.
+
+### Micro Interactions
+
+Every clickable element should have premium interaction feedback:
+
+* Buttons.
+* Cards.
+* Tables.
+* Inputs.
+* Filters.
+* Navigation items.
+* Menus.
+* Dialogs.
+
+### Loading States
+
+Never use basic spinners.
+
+Use:
+
+* Skeleton Screens.
+* Context-aware loading animations.
+* Progressive content loading.
+* AI-generated loading experiences where appropriate.
+
+### Visual Quality Standard
+
+The final product should feel closer to a premium SaaS platform than a traditional ERP system.
+
+Users should immediately feel that the application is modern, intelligent, premium, and technologically advanced from the first interaction.
+
+Motion design quality must be considered a deliverable and evaluated with the same importance as functionality, security, scalability, and business logic.
+
+The application should create a strong visual impression and a memorable user experience while maintaining excellent performance and responsiveness across desktop, tablet, and mobile devices.
+
+Animations must be meaningful, performance-optimized, and enhance usability. Motion design should support productivity and clarity rather than distract users from operational tasks.
+
+
+الهدف الصحيح لمشروعك:
+
+ERP احترافي.
+سرعة تشغيل عالية.
+أنيميشن Premium.
+UI يلفت النظر.
+إحساس قريب من منتجات SaaS الحديثة وليس برامج ERP التقليدية القديمة.
+
+The application must be developed as a full Feed Manufacturing ERP Platform with a SaaS-ready architecture, supporting multi-company, multi-branch, tenant isolation, subscription plans, feature toggles, and future commercialization without requiring major architectural changes.
