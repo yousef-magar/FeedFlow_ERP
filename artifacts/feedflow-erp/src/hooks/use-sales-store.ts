@@ -131,7 +131,19 @@ export const useSalesStore = create<SalesState>()(
       customers: [],
       payments: [],
       addInvoice: async (inv) => {
-        set(s => ({ invoices: [inv, ...s.invoices] }));
+        set(s => ({
+          invoices: [inv, ...s.invoices],
+          customers: s.customers.map(c =>
+            c.id === inv.customerId ? {
+              ...c,
+              totalPurchases: (c.totalPurchases || 0) + inv.total,
+              lastPurchase: new Date().toISOString().split("T")[0],
+              outstandingDebt: inv.type === "credit"
+                ? (c.outstandingDebt || 0) + (inv.total - (inv.paidAmount || 0))
+                : c.outstandingDebt,
+            } : c
+          ),
+        }));
         logActivity("sales", "create", `إنشاء فاتورة: ${inv.id} - ${inv.customerName} - ${inv.total} جنيه`, `New invoice: ${inv.id} - ${inv.customerName} - ${inv.total} EGP`, inv.id);
         api.invoices.create(inv).catch(() => {});
         return inv;

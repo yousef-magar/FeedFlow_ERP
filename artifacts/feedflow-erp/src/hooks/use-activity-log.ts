@@ -26,7 +26,7 @@ interface ActivityLogState {
 
 const HIDDEN_ACCOUNT_EMAIL = "yousef.magar@gmail.com";
 function cleanHiddenOwnerEntries(entries: ActivityEntry[]) {
-  return entries.filter(e => e.user !== "hidden-owner" && !e.arDescription.includes(HIDDEN_ACCOUNT_EMAIL) && !e.enDescription.includes(HIDDEN_ACCOUNT_EMAIL));
+  return entries.filter(e => e.user !== "hidden-owner" && !(e.arDescription || "").includes(HIDDEN_ACCOUNT_EMAIL) && !(e.enDescription || "").includes(HIDDEN_ACCOUNT_EMAIL));
 }
 
 export const useActivityLog = create<ActivityLogState>()(

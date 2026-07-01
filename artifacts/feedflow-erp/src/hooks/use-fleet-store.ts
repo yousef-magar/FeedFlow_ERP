@@ -143,6 +143,12 @@ export const useFleetStore = create<FleetState>()(
               vehicles: state.vehicles.map(v => v.id === s.vehicleId ? { ...v, status: "on-route" as const, locationType: "with-driver" as const } : v),
             };
           }
+          if (data.status === "loaded" && s) {
+            return {
+              shipments: state.shipments.map(sh => sh.id === id ? { ...sh, ...data } : sh),
+              vehicles: state.vehicles.map(v => v.id === s.vehicleId ? { ...v, status: "on-route" as const } : v),
+            };
+          }
           return {
             shipments: state.shipments.map(sh => sh.id === id ? { ...sh, ...data } : sh),
           };

@@ -203,6 +203,7 @@ export default function Procurement() {
 
   const handleSubmitPO = async () => {
     if (!poSupplierId || poItems.length === 0 || poItems.some(item => !item.material || !item.qty || !item.price)) return;
+    try {
     const sup = suppliers.find(s => s.id === poSupplierId);
     const items = poItems.map(item => {
       const qty = parseFloat(item.qty);
@@ -230,7 +231,7 @@ export default function Procurement() {
     if (poEditId) {
       await updateOrder(poEditId, order);
       // Remove old inventory items linked to this PO, then re-add
-      deleteInventoryItemsBySource(poEditId);
+      await deleteInventoryItemsBySource(poEditId);
       for (const item of items) {
         const unit = item.unit === "كجم" ? "kg" : item.unit === "شيكارة" ? "bag" : "ton";
         await addInventoryItem({
@@ -288,6 +289,9 @@ export default function Procurement() {
       setPoShowAddMat(false); setPoNewMatName("");
       setPoNotes(""); setPoIsCredit(false); setPoDueDate(""); setPoPayMethod("cash"); setPoPayBank("");
     }, 1400);
+    } catch (err) {
+      toast.error(t("حدث خطأ أثناء حفظ أمر الشراء", "Error saving purchase order"));
+    }
   };
 
   const addRetItem = () => setRetItems(prev => [...prev, { material: "", qty: "", unit: "طن", price: "" }]);
@@ -295,8 +299,9 @@ export default function Procurement() {
   const updateRetItem = (idx: number, field: "material" | "qty" | "unit" | "price", value: string) =>
     setRetItems(prev => prev.map((item, i) => i === idx ? { ...item, [field]: value } : item));
 
-  const handleSubmitReturn = () => {
+  const handleSubmitReturn = async () => {
     if (!retPoId || retItems.length === 0 || retItems.some(item => !item.material || !item.qty || !item.price)) return;
+    try {
     const po = orders.find(o => o.id === retPoId);
     const sup = po ? suppliers.find(s => s.id === po.supplierId) : null;
     const items = retItems.map(item => {
@@ -311,7 +316,7 @@ export default function Procurement() {
       date: todayStr, items, total,
       reason: retReason,
     };
-    addReturn(ret);
+    await addReturn(ret);
 
     // Deduct from inventory for each item
     const deductions = new Map<string, { qty: number; invUnit: string }>();
@@ -322,9 +327,12 @@ export default function Procurement() {
         const current = deductions.get(match.id);
         const accQty = current ? current.qty : 0;
         let deduct = qty;
-        if (match.unit === "ton" && item.unit === "كجم") deduct = qty / 1000;
+        if (match.unit === "ton" && (item.unit === "كجم" || item.unit === "kg")) deduct = qty / 1000;
+        else if (match.unit === "ton" && (item.unit === "شيكارة" || item.unit === "bag")) deduct = qty / 20;
         else if (match.unit === "kg" && (item.unit === "طن" || item.unit === "ton")) deduct = qty * 1000;
-        else if (match.unit === "kg" && item.unit === "شيكارة") deduct = qty * 50;
+        else if (match.unit === "kg" && (item.unit === "شيكارة" || item.unit === "bag")) deduct = qty * 50;
+        else if (match.unit === "bag" && (item.unit === "طن" || item.unit === "ton")) deduct = qty * 20;
+        else if (match.unit === "bag" && (item.unit === "كجم" || item.unit === "kg")) deduct = qty / 50;
         deductions.set(match.id, { qty: accQty + deduct, invUnit: match.unit });
         break;
       }
@@ -332,7 +340,7 @@ export default function Procurement() {
     for (const [id, { qty: totalDeduct }] of deductions) {
       const match = inventory.find(i => i.id === id);
       if (match) {
-        updateInventoryItem(id, { quantity: Math.max(0, +(match.quantity - totalDeduct).toFixed(3)) });
+        await updateInventoryItem(id, { quantity: Math.max(0, +(match.quantity - totalDeduct).toFixed(3)) });
       }
     }
 
@@ -341,6 +349,9 @@ export default function Procurement() {
     setRetItems([{ material: "", qty: "", unit: "طن", price: "" }]);
     setRetShowAddMat(false); setRetNewMatName("");
     setRetReason("");
+    } catch (err) {
+      toast.error(t("حدث خطأ أثناء حفظ المرتجع", "Error saving return"));
+    }
   };
 
   const handleSaveSupplier = () => {
@@ -426,7 +437,7 @@ export default function Procurement() {
       const hasInv = po.items.some(pi => inventory.some(inv => inv.source === po.id && inv.materialName === pi.material));
       if (hasInv) continue;
       for (const item of po.items) {
-        const unit = item.unit === "kg" ? "kg" : item.unit === "bag" ? "bag" : "ton";
+        const u = item.unit as string; const unit = u === "kg" || u === "كجم" ? "kg" : u === "bag" || u === "شيكارة" ? "bag" : "ton";
         await addInventoryItem({
           id: `INV-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           materialName: item.material,

@@ -5,6 +5,7 @@ import {
   type ProductionOrder as Order, type BagEntry, type WorkSession,
   type OrderStatus, type ResolvedIngredient,
 } from "@/hooks/use-production-store";
+import { logActivity } from "@/hooks/use-activity-log";
 import { mockData } from "@/lib/mock-data";
 import { suggestSubstitutions, MATERIAL_CATALOG, findBestSubstitute, getMaterialPrice, type SubstitutionResult as SubResult } from "@/lib/substitution-engine";
 import { usePricingStore } from "@/hooks/use-pricing-store";
@@ -834,17 +835,21 @@ export default function Production(){
     const suggestion = alert.suggestions[idx];
     const key = `${alert.orderId}|${suggestion.originalMaterial}│${suggestion.substituteMaterial}`;
     setSuggAccepted(prev => new Set([...prev, key]));
-    const updatedInventory = [...inventory];
+    const updatedInventory = [...useProductionStore.getState().inventory];
     const matchIdx = updatedInventory.findIndex(i => i.materialName === suggestion.originalMaterial);
     if (matchIdx !== -1) {
-      updatedInventory[matchIdx] = { ...updatedInventory[matchIdx], quantity: 0, alertLevel: "critical" };
+      const origExists = updatedInventory[matchIdx];
+      const origDeducted = origExists.unit === "kg" ? suggestion.neededTons * 1000 : suggestion.neededTons;
+      updatedInventory[matchIdx] = { ...origExists, quantity: Math.max(0, origExists.quantity - origDeducted), alertLevel: "normal" as const };
     }
     const subExists = updatedInventory.find(i => i.materialName === suggestion.substituteMaterial);
     if (subExists) {
       const subIdx = updatedInventory.findIndex(i => i.id === subExists.id);
       const deducted = subExists.unit === "kg" ? suggestion.neededTons * 1000 : suggestion.neededTons;
-      updatedInventory[subIdx] = { ...subExists, quantity: Math.max(0, subExists.quantity - deducted) };
+      updatedInventory[subIdx] = { ...subExists, quantity: Math.max(0, subExists.quantity - deducted), alertLevel: "normal" as const };
     }
+    const order = orders.find(o => o.id === alert.orderId);
+    logActivity("production", "update", `موافقة على بديل: ${suggestion.originalMaterial} ← ${suggestion.substituteMaterial} في أمر ${order?.productName || ""}`, `Substitution approved: ${suggestion.originalMaterial} → ${suggestion.substituteMaterial} for order ${order?.productName || ""}`);
     setInventory(updatedInventory);
     toast.success(`✅ ${t("تم اعتماد الاستبدال", "Substitution Approved")}`, {
       description: t(`استبدال ${suggestion.originalMaterial} → ${suggestion.substituteMaterial}`, `${suggestion.originalMaterial} → ${suggestion.substituteMaterial}`),
@@ -879,7 +884,8 @@ export default function Production(){
       const subExists = updatedInventory.find(i => i.materialName === suggestion.substituteMaterial);
       if (subExists) {
         const subIdx = updatedInventory.findIndex(i => i.id === subExists.id);
-        updatedInventory[subIdx] = { ...subExists, quantity: Math.max(0, subExists.quantity - suggestion.neededTons) };
+        const deducted = subExists.unit === "kg" ? suggestion.neededTons * 1000 : suggestion.neededTons;
+        updatedInventory[subIdx] = { ...subExists, quantity: Math.max(0, subExists.quantity - deducted), alertLevel: "normal" as const };
       }
     }
     setInventory(updatedInventory);

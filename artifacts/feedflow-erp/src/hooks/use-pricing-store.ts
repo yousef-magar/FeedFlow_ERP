@@ -237,7 +237,7 @@ export const usePricingStore = create<PricingState>()(
         let totalCost = 0;
         const prices = get().productPrices;
         for (const ing of formula) {
-          const ingPrice = prices.find(p => p.productName === ing.material);
+          const ingPrice = prices.find(p => p.productName === ing.material || p.productName.includes(ing.material) || ing.material.includes(p.productName));
           const ingCostPerTon = ingPrice?.costPrice ||
             (() => {
               for (const group of Object.values(MATERIAL_CATALOG)) {

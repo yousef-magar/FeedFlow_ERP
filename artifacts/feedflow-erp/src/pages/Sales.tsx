@@ -614,6 +614,15 @@ export default function Sales() {
         next.pricePerTon = getPrice(value, formPricing as "wholesale" | "retail" | "distributor") || p?.wholeSalePrice || 0;
         next.bagWeight = p?.bagWeight || 50;
       }
+      if (field === "productName") {
+        const p = products.find(p => p.name === value);
+        if (p) {
+          next.productId = p.id;
+          next.productCode = p.code || "";
+          next.pricePerTon = getPrice(p.id, formPricing as "wholesale" | "retail" | "distributor") || p.wholeSalePrice || 0;
+          next.bagWeight = p.bagWeight || 50;
+        }
+      }
       if (field === "qtyTons" && item.bagWeight > 0) {
         next.bagCount = Math.round((value * 1000) / item.bagWeight);
       }
@@ -672,7 +681,7 @@ export default function Sales() {
     </motion.div>;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formCustId || !formType || formItems.some(i => (!i.productId && !i.productName) || i.qtyTons <= 0)) return;
     if (formItems.some(i => !i.pricePerTon)) {
       toast.error(t("يوجد منتج لم يسعر بعد. حدد سعراً أولاً", "A product has no price. Set a price first"));
@@ -682,58 +691,60 @@ export default function Sales() {
       toast.error(t("لا تملك صلاحية تجاوز حد الخصم الأقصى", "No permission to exceed max discount limit"));
       return;
     }
-    const cust = customers.find(c => c.id === formCustId);
-    const inv: SalesInvoice = {
-      id: editingId || `INV-2025-${String(nextInvoiceNum()).padStart(3, "0")}`,
-      customerId: formCustId,
-      customerName: cust?.name || "",
-      customerPhone: cust?.phone || "",
-      type: formType as any,
-      status: paidAmount >= grandTotal ? "paid" : (formStatus || "pending") as any,
-      date: new Date().toISOString().split("T")[0],
-      items: formItems.map(i => ({ ...i })),
-      discountPct: parseFloat(formDiscount) || 0,
-      taxPct: taxEnabled ? taxPercent : 0,
-      subtotal, discountAmt, taxAmt, total: grandTotal,
-      additionalCharges: chargesAmount || undefined,
-      additionalChargesDesc: formChargesDesc || undefined,
-      pricingTier: formType === "credit" ? (formPricing as "wholesale" | "retail") : undefined,
-      marketerId: formMarketerId || undefined,
-      paidAmount: Math.min(grandTotal, parseFloat(formPaidAmount) || 0),
-        payMethod: formPayMethod || undefined,
-        payBank: formPayMethod && formPayMethod !== "cash" ? formPayBank : undefined,
-      needsDelivery: formNeedsDelivery || undefined,
-      deliveryAddress: formNeedsDelivery ? { governorate: formDelGov, region: formDelRegion, village: formDelVillage || undefined, details: formDelDetailsTags.join("، ") } : undefined,
-    } as any;
-    if (editingId) {
-      updateInvoice(editingId, inv);
-      toast.success(t("تم تعديل الفاتورة", "Invoice updated"));
-    } else {
-      addInvoice(inv);
-      setLastCreatedInv(inv);
-      if (excessCredit && excessAmount > 0 && cust) {
-        const newDebt = Math.max(0, (cust.outstandingDebt || 0) - excessAmount);
-        updateCustomer(formCustId, { outstandingDebt: newDebt });
-      }
-      for (const item of formItems) {
-        const match = inventory.find(i => i.type === "finished" && i.materialName === item.productName)
-          ?? inventory.find(i => i.type === "raw" && i.materialName === item.productName);
-        if (match) {
-          const consumed = match.unit === "kg" ? item.qtyTons * 1000 : match.unit === "bag" ? item.qtyTons * 20 : item.qtyTons;
-          const newQty = Math.max(0, +(match.quantity - consumed).toFixed(2));
-          const newConsumed = +(match.consumedQuantity + consumed).toFixed(2);
-          updateInventoryItem(match.id, { quantity: newQty, consumedQuantity: newConsumed });
-        } else {
-          addFinishedProduct(item.productId || item.productName, item.productName, -item.qtyTons);
+    try {
+      const cust = customers.find(c => c.id === formCustId);
+      const inv: SalesInvoice = {
+        id: editingId || `INV-2025-${String(nextInvoiceNum()).padStart(3, "0")}`,
+        customerId: formCustId,
+        customerName: cust?.name || "",
+        customerPhone: cust?.phone || "",
+        type: formType as any,
+        status: paidAmount >= grandTotal ? "paid" : (formStatus || "pending") as any,
+        date: new Date().toISOString().split("T")[0],
+        items: formItems.map(i => ({ ...i })),
+        discountPct: parseFloat(formDiscount) || 0,
+        taxPct: taxEnabled ? taxPercent : 0,
+        subtotal, discountAmt, taxAmt, total: grandTotal,
+        additionalCharges: chargesAmount || undefined,
+        additionalChargesDesc: formChargesDesc || undefined,
+        pricingTier: formType === "credit" ? (formPricing as "wholesale" | "retail") : undefined,
+        marketerId: formMarketerId || undefined,
+        paidAmount: Math.min(grandTotal, parseFloat(formPaidAmount) || 0),
+          payMethod: formPayMethod || undefined,
+          payBank: formPayMethod && formPayMethod !== "cash" ? formPayBank : undefined,
+        needsDelivery: formNeedsDelivery || undefined,
+        deliveryAddress: formNeedsDelivery ? { governorate: formDelGov, region: formDelRegion, village: formDelVillage || undefined, details: formDelDetailsTags.join("، ") } : undefined,
+      } as any;
+      if (editingId) {
+        await updateInvoice(editingId, inv);
+        toast.success(t("تم تعديل الفاتورة", "Invoice updated"));
+      } else {
+        await addInvoice(inv);
+        setLastCreatedInv(inv);
+        if (excessCredit && excessAmount > 0 && cust) {
+          const newDebt = Math.max(0, (cust.outstandingDebt || 0) - excessAmount);
+          await updateCustomer(formCustId, { outstandingDebt: newDebt });
         }
+        for (const item of formItems) {
+          const match = inventory.find(i => i.type === "finished" && i.materialName === item.productName)
+            ?? inventory.find(i => i.type === "raw" && i.materialName === item.productName);
+          if (match) {
+            const consumed = match.unit === "kg" ? item.qtyTons * 1000 : match.unit === "bag" ? item.qtyTons * (1000 / (item.bagWeight || 50)) : item.qtyTons;
+            const newQty = Math.max(0, +(match.quantity - consumed).toFixed(2));
+            const newConsumed = +(match.consumedQuantity + consumed).toFixed(2);
+            await updateInventoryItem(match.id, { quantity: newQty, consumedQuantity: newConsumed });
+          }
+        }
+        if (formNeedsDelivery && formDelGov) {
+          await saveCustomerAddress(formCustId, { governorate: formDelGov, region: formDelRegion, village: formDelVillage || undefined, details: formDelDetailsTags });
+        }
+        toast.success(t("تم إنشاء الفاتورة", "Invoice created"));
       }
-      if (formNeedsDelivery && formDelGov) {
-        saveCustomerAddress(formCustId, { governorate: formDelGov, region: formDelRegion, village: formDelVillage || undefined, details: formDelDetailsTags });
-      }
-      toast.success(t("تم إنشاء الفاتورة", "Invoice created"));
+      setSubmitted(true);
+      setTimeout(() => { setSubmitted(false); setSheetOpen(false); resetForm(); setLastCreatedInv(null); }, 6000);
+    } catch (err) {
+      toast.error(t("حدث خطأ أثناء حفظ الفاتورة", "Error saving invoice"));
     }
-    setSubmitted(true);
-    setTimeout(() => { setSubmitted(false); setSheetOpen(false); resetForm(); setLastCreatedInv(null); }, 6000);
   };
 
   const handleDeleteInv = (id: string) => {
@@ -741,43 +752,45 @@ export default function Sales() {
     toast.info(t("تم حذف الفاتورة", "Invoice deleted"));
   };
 
-  const handleSubmitReturn = () => {
-    if (!retCustId || retItems.some(i => !i.productId || i.qtyTons <= 0)) return;
-    const cust = customers.find(c => c.id === retCustId);
-    const retSubtotal = retItems.reduce((s, i) => s + i.qtyTons * i.pricePerTon, 0);
-    const retDiscPct = parseFloat(retDiscount) || 0;
-    const retDiscAmt = retSubtotal * retDiscPct / 100;
-    const retTaxPct = taxEnabled ? taxPercent : 0;
-    const retTaxAmt = taxEnabled ? (retSubtotal - retDiscAmt) * taxPercent / 100 : 0;
-    const retTotal = retSubtotal - retDiscAmt + retTaxAmt;
-    const ret: SalesReturn = {
-      id: `SRT-${Date.now()}`,
-      invoiceId: retInvId === "none" ? "" : retInvId,
-      customerId: retCustId,
-      customerName: cust?.name || "",
-      date: new Date().toISOString().split("T")[0],
-      items: retItems.map(i => ({ ...i })),
-      reason: retReason,
-      total: retTotal,
-      discountPct: retDiscPct, discountAmt: retDiscAmt,
-      taxPct: retTaxPct, taxAmt: retTaxAmt,
-    };
-    addReturn(ret);
-    for (const item of retItems) {
-      const match = inventory.find(i => i.type === "finished" && i.materialName === item.productName)
-        ?? inventory.find(i => i.type === "raw" && i.materialName === item.productName);
-      if (match) {
-        const added = match.unit === "kg" ? item.qtyTons * 1000 : match.unit === "bag" ? item.qtyTons * 20 : item.qtyTons;
-        const newQty = +(match.quantity + added).toFixed(2);
-        updateInventoryItem(match.id, { quantity: newQty });
-      } else {
-        addFinishedProduct(item.productId, item.productName, item.qtyTons);
+  const handleSubmitReturn = async () => {
+    if (!retCustId || retItems.some(i => (!i.productId && !i.productName) || i.qtyTons <= 0)) return;
+    try {
+      const cust = customers.find(c => c.id === retCustId);
+      const retSubtotal = retItems.reduce((s, i) => s + i.qtyTons * i.pricePerTon, 0);
+      const retDiscPct = parseFloat(retDiscount) || 0;
+      const retDiscAmt = retSubtotal * retDiscPct / 100;
+      const retTaxPct = taxEnabled ? taxPercent : 0;
+      const retTaxAmt = taxEnabled ? (retSubtotal - retDiscAmt) * taxPercent / 100 : 0;
+      const retTotal = retSubtotal - retDiscAmt + retTaxAmt;
+      const ret: SalesReturn = {
+        id: `SRT-${Date.now()}`,
+        invoiceId: retInvId === "none" ? "" : retInvId,
+        customerId: retCustId,
+        customerName: cust?.name || "",
+        date: new Date().toISOString().split("T")[0],
+        items: retItems.map(i => ({ ...i })),
+        reason: retReason,
+        total: retTotal,
+        discountPct: retDiscPct, discountAmt: retDiscAmt,
+        taxPct: retTaxPct, taxAmt: retTaxAmt,
+      };
+      await addReturn(ret);
+      for (const item of retItems) {
+        const match = inventory.find(i => i.type === "finished" && i.materialName === item.productName)
+          ?? inventory.find(i => i.type === "raw" && i.materialName === item.productName);
+        if (match) {
+          const added = match.unit === "kg" ? item.qtyTons * 1000 : match.unit === "bag" ? item.qtyTons * (1000 / (item.bagWeight || 50)) : item.qtyTons;
+          const newQty = +(match.quantity + added).toFixed(2);
+          await updateInventoryItem(match.id, { quantity: newQty });
+        }
       }
+      toast.success(t("تم تسجيل المرتجع", "Return recorded"));
+      setReturnOpen(false);
+      setRetCustId(""); setRetCustSearch(""); setRetInvSearch(""); setRetDiscount("0"); setRetReason(""); setRetInvId("");
+      setRetItems([{ productId: "", productName: "", qtyTons: 0, bagWeight: 50, bagCount: 0, pricePerTon: 0 }]);
+    } catch (err) {
+      toast.error(t("حدث خطأ أثناء حفظ المرتجع", "Error saving return"));
     }
-    toast.success(t("تم تسجيل المرتجع", "Return recorded"));
-    setReturnOpen(false);
-    setRetCustId(""); setRetCustSearch(""); setRetInvSearch(""); setRetDiscount("0"); setRetReason(""); setRetInvId("");
-    setRetItems([{ productId: "", productName: "", qtyTons: 0, bagWeight: 50, bagCount: 0, pricePerTon: 0 }]);
   };
 
   const handleAddCustomer = () => {

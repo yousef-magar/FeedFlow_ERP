@@ -413,8 +413,10 @@ export const useHRStore = create<HRState>()(
             else if (a === "late") { lateDays++; totalPay += dailyRate * (1 - lpct / 100); }
             else if (a === "deduction") { deductionDays++; totalPay += Math.max(0, dailyRate - (dedAmt || 0)); }
             else { presentDays++; totalPay += dailyRate; }
-            const ot = state.computeOvertime(emp, date);
-            if (ot.pay > 0) { totalPay += ot.pay; overtimePay += ot.pay; }
+            if (a === "present" || a === "late") {
+              const ot = state.computeOvertime(emp, date);
+              if (ot.pay > 0) { totalPay += ot.pay; overtimePay += ot.pay; }
+            }
           }
           const pendingInc = state.computePendingIncentive(emp.id);
           const grossPay = totalPay + pendingInc;
@@ -448,8 +450,10 @@ export const useHRStore = create<HRState>()(
             else if (a === "late") { lateDays++; totalPay += dailyRate * (1 - lpct / 100); }
             else if (a === "deduction") { deductionDays++; totalPay += Math.max(0, dailyRate - (dedAmt || 0)); }
             else { presentDays++; totalPay += dailyRate; }
-            const ot = state.computeOvertime(emp, date);
-            if (ot.pay > 0) totalPay += ot.pay;
+            if (a === "present" || a === "late") {
+              const ot = state.computeOvertime(emp, date);
+              if (ot.pay > 0) totalPay += ot.pay;
+            }
           }
           const grossPay = totalPay;
           return { dailyRate, presentDays, absentDays, lateDays, deductionDays, grossPay, dayNumbers };
@@ -520,8 +524,10 @@ export const useHRStore = create<HRState>()(
             else if (a === "late") { lateDays++; totalPay += dailyRate * (1 - lpct / 100); }
             else if (a === "deduction") { deductionDays++; totalPay += Math.max(0, dailyRate - (dedAmt || 0)); }
             else { presentDays++; totalPay += dailyRate; }
-            const ot = state.computeOvertime(emp, date);
-            if (ot.pay > 0) totalPay += ot.pay;
+            if (a === "present" || a === "late") {
+              const ot = state.computeOvertime(emp, date);
+              if (ot.pay > 0) totalPay += ot.pay;
+            }
           }
           const pendingInc = state.computePendingIncentive(employeeId);
           const grossPay = totalPay + pendingInc;
@@ -660,6 +666,16 @@ export const useHRStore = create<HRState>()(
                 ...e, advances: 0, overtime: 0, allowances: 0, deductions: 0,
               })),
               incentiveApproved: updatedI,
+              exportedPayrollEntries: [
+                ...s.exportedPayrollEntries,
+                {
+                  id: `PAYROLL-${tx.id}`,
+                  date: new Date().toISOString().split("T")[0],
+                  month, year,
+                  totalAmount: tx.totalNet,
+                  description: `رواتب شهر ${String(month).padStart(2, "0")}/${year}`,
+                },
+              ],
             };
           });
           logActivity("payroll", "create", `اعتماد كشوف الرواتب`, `Approve payroll`);
@@ -708,6 +724,7 @@ export const useHRStore = create<HRState>()(
               const typeLabel =
                 tx.approvalType === "salary_monthly" ? "راتب شهري"
                 : tx.approvalType === "salary_weekly" ? `راتب أسبوعي (أسبوع ${tx.weekNumber})`
+                : tx.approvalType === "commission" ? "عمولة"
                 : "حافز يومي";
               entries.push({ employeeId: b.employeeId, name: b.name, amount: b.netPay, type: typeLabel });
               totalAmount += b.netPay;

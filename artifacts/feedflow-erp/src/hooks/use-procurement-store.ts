@@ -152,10 +152,21 @@ export const useProcurementStore = create<ProcState>()(
         api.purchaseOrders.delete(id).catch(() => {});
       },
       addReturn: async (r) => {
-        set(state => ({
-          returns: [...state.returns, r],
-          orders: state.orders.map(o => o.id === r.poId ? { ...o, total: (o.total || 0) - (r.total || 0) } : o),
-        }));
+        set(state => {
+          const updatedOrders = state.orders.map(o =>
+            o.id === r.poId ? { ...o, total: Math.max(0, (o.total || 0) - (r.total || 0)), paidAmount: Math.min(o.paidAmount || 0, Math.max(0, (o.total || 0) - (r.total || 0))) } : o
+          );
+          const supDebt = updatedOrders
+            .filter(o => o.supplierId === r.supplierId)
+            .reduce((s, o) => s + Math.max(0, (o.total || 0) - (o.paidAmount || 0)), 0);
+          return {
+            returns: [...state.returns, r],
+            orders: updatedOrders,
+            suppliers: state.suppliers.map(s =>
+              s.id === r.supplierId ? { ...s, outstandingDebt: supDebt } : s
+            ),
+          };
+        });
         logActivity("procurement", "create", `إضافة مرتجع مشتريات: ${r.id} - ${r.total} جنيه`, `New purchase return: ${r.id} - ${r.total} EGP`, r.id);
         api.purchaseReturns.create(r).catch(() => {});
         return r;
