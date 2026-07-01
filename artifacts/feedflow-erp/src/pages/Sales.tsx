@@ -673,7 +673,7 @@ export default function Sales() {
   };
 
   const handleSubmit = () => {
-    if (!formCustId || !formType || formItems.some(i => !i.productId || i.qtyTons <= 0)) return;
+    if (!formCustId || !formType || formItems.some(i => (!i.productId && !i.productName) || i.qtyTons <= 0)) return;
     if (formItems.some(i => !i.pricePerTon)) {
       toast.error(t("يوجد منتج لم يسعر بعد. حدد سعراً أولاً", "A product has no price. Set a price first"));
       return;
@@ -1820,7 +1820,7 @@ export default function Sales() {
                 <motion.div key="b" className="flex gap-3">
                   <motion.div whileHover={{ y: -1, boxShadow: "0 4px 15px rgba(0,0,0,0.08)" }} whileTap={{ scale: 0.96 }}
                     transition={{ type: "spring", stiffness: 250, damping: 22, mass: 0.8 }}>
-                    <Button className="flex-1 rounded-xl" onClick={handleSubmit} disabled={!formCustId || !formType || formItems.some(i => !i.productId || i.qtyTons <= 0)}>
+                    <Button className="flex-1 rounded-xl" onClick={handleSubmit} disabled={!formCustId || !formType || formItems.some(i => (!i.productId && !i.productName) || i.qtyTons <= 0)}>
                       {editingId ? t("حفظ التعديل", "Save Changes") : t("إنشاء الفاتورة", "Create Invoice")}
                     </Button>
                   </motion.div>
